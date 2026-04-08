@@ -6,7 +6,28 @@ function fmt(n) {
   return n.toLocaleString('en-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export default function TotalExpenses({ expenses, removeExpense }) {
+export default function TotalExpenses({ expenses, removeExpense, loading, error, refetch }) {
+  if (loading) {
+    return (
+      <div className="section-container">
+        <h1 className="section-title">Total Expenses</h1>
+        <p className="section-subtitle">Loading your expenses...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="section-container">
+        <h1 className="section-title">Total Expenses</h1>
+        <Card style={{ textAlign: 'center', padding: '2rem' }}>
+          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>⚠️</div>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>{error}</p>
+          <Button onClick={refetch} variant="outline">Try again</Button>
+        </Card>
+      </div>
+    );
+  }
   const grandTotal = expenses.reduce((sum, e) => sum + e.totalCost, 0);
 
   return (

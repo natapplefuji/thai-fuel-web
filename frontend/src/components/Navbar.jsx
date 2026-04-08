@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Button from './ui/Button';
 import styles from './Navbar.module.css';
 
 const NAV_ITEMS = [
@@ -8,7 +9,7 @@ const NAV_ITEMS = [
   { id: 'contact', label: 'Contact', icon: '📞' },
 ];
 
-export default function Navbar({ activeSection, setActiveSection, expenseCount }) {
+export default function Navbar({ activeSection, setActiveSection, expenseCount, user, onLogout, onOpenAuth }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Close hamburger menu when viewport is tablet+
@@ -54,6 +55,18 @@ export default function Navbar({ activeSection, setActiveSection, expenseCount }
           ))}
         </div>
 
+        {/* User widget (desktop) */}
+        <div className={styles.userWidget}>
+          {user ? (
+            <>
+              <span className={styles.username}>👤 {user.username}</span>
+              <Button variant="danger" size="sm" onClick={onLogout}>Log out</Button>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" onClick={onOpenAuth}>Log In</Button>
+          )}
+        </div>
+
         {/* Hamburger button */}
         <button
           className={styles.hamburger}
@@ -72,6 +85,22 @@ export default function Navbar({ activeSection, setActiveSection, expenseCount }
       {/* Mobile dropdown */}
       {menuOpen && (
         <div className={styles.mobileMenu}>
+          {/* User widget (mobile) */}
+          <div className={styles.mobileUserWidget}>
+            {user ? (
+              <>
+                <span className={styles.mobileUsername}>👤 {user.username}</span>
+                <Button variant="danger" size="sm" onClick={() => { onLogout(); setMenuOpen(false); }}>
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => { onOpenAuth(); setMenuOpen(false); }}>
+                Log In / Register
+              </Button>
+            )}
+          </div>
+          <hr className={styles.mobileDivider} />
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}

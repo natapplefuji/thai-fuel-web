@@ -11,7 +11,7 @@ const EMPTY_FORM = {
   fuelEfficiency: '',
 };
 
-export default function FuelCalculator({ fuelPrices, addExpense }) {
+export default function FuelCalculator({ fuelPrices, addExpense, isAuthenticated, onOpenAuth }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [result, setResult] = useState(null);
   const [toast, setToast] = useState(false);
@@ -169,14 +169,24 @@ export default function FuelCalculator({ fuelPrices, addExpense }) {
               <Button onClick={handleCalculate} disabled={!canCalculate} size="lg">
                 Calculate
               </Button>
-              <Button
-                onClick={handleAddExpense}
-                disabled={!result}
-                variant="secondary"
-                size="lg"
-              >
-                + Add to Expenses
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  onClick={handleAddExpense}
+                  disabled={!result}
+                  variant="secondary"
+                  size="lg"
+                >
+                  + Add to Expenses
+                </Button>
+              ) : (
+                <Button
+                  onClick={onOpenAuth}
+                  variant="outline"
+                  size="lg"
+                >
+                  Log in to save
+                </Button>
+              )}
             </div>
 
             {toast && (

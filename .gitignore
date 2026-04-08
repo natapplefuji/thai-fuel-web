@@ -6,3 +6,4 @@ dist/
 .vercel
 *.log
 npm-debug.log*
+backend/database.sqlite
